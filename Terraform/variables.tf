@@ -9,6 +9,19 @@ variable "bastion_size" { default = "t2.micro" }
 variable "master_size"  { default = "t2.medium" }
 variable "worker_size"  { default = "t2.small" }
 
+variable "vpc_cidr"   { default = "10.0.0.0/16" }
+variable "public_dns" { default = "bmduffy.net" }
+
+variable "kubernetes_subnet" {
+    type = "map"
+    default = {
+        name    = "kubernetes"
+        cidr    = "10.0.0.0/24"
+        reverse = "0.0.10.in-addr.arpa"
+        dns     = "iac.bootcamp"
+    }
+}
+
 variable "worker_tags" {
     type = "map"
     default = {

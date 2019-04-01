@@ -12,8 +12,17 @@ variable "node_image" {
 }
 
 variable "node_type" {
-    description = "Required - AWS node t-shirt size"
+    default = "t2.micro"
+    description = "Optional - AWS node t-shirt size"
 }
+
+variable "node_subnet" {
+    type = "map"
+    description = "Required - subnet to put the node in"
+}
+
+variable "node_subnet_id" {}
+variable "node_security_group" {}
 
 variable "node_tags" {
     type = "map"
@@ -22,14 +31,6 @@ variable "node_tags" {
 
 variable "node_keypair" {
     description = "Required - Path to AWS PEM on jumpbox"
-}
-
-variable "node_subnet" {
-    description = "Required - Put The node in this subnet"
-}
-
-variable "node_sec_grp_id" {
-    description = "Required - security group"
 }
 
 variable "root_volume_size" {
@@ -44,3 +45,9 @@ variable "public_ip" {
     description = "Give this node a public IP address"
     default = false
 }
+
+variable "public_dns" { default = ""  }
+
+variable "public_zone_id"  { default = "" }
+variable "private_zone_id" {}
+variable "reverse_zone_id" {}

@@ -1,7 +1,7 @@
 
 resource "aws_vpc" "bootcamp" {
 
-    cidr_block           = "10.0.0.0/16"
+    cidr_block           = "${var.vpc_cidr}"
     enable_dns_support   = true
     enable_dns_hostnames = true
 
@@ -16,11 +16,11 @@ resource "aws_vpc" "bootcamp" {
 
 resource "aws_subnet" "kubernetes" {
 
-    vpc_id = "${aws_vpc.bootcamp.id}"
-    cidr_block = "10.0.0.0/24"
+    vpc_id     = "${aws_vpc.bootcamp.id}"
+    cidr_block = "${var.kubernetes_subnet["cidr"]}"
 
     tags = {
-        Name = "iac-bootcamp-subnet"
+        Name = "${var.kubernetes_subnet["name"]}"
         Project = "iac-bootcamp"
         Environment = "Test"
         InfraComponent = "Network"
@@ -66,12 +66,12 @@ resource "aws_route_table_association" "connect-k8s-subnet-to-bootcamp-route-tab
 
 resource "aws_security_group" "kubernetes" {
 
-    name        = "kubernetes"
+    name        = "${var.kubernetes_subnet["name"]}"
     description = "Allow traffic to standard ports in kubernetes cluster"
     vpc_id      = "${aws_vpc.bootcamp.id}"
 
     tags {
-        Name = "kubernetes"
+        Name = "${var.kubernetes_subnet["name"]}"
         Project = "iac-bootcamp"
         Environment = "Test"
         InfraComponent = "Network"

@@ -3,7 +3,7 @@
 
 # Terraform ignore files
 **/.terraform
-**/terraform.fstate
+**/terraform.tfstate*
 **/*.plan
 
 # Ansible ignore files

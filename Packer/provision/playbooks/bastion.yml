@@ -52,6 +52,14 @@
       group: centos
       mode: 0400
   -
+     name: "Copy SSH keys"
+     copy:
+       src: "~/.ssh/{{ item }}"
+       dest: "{{ home }}/.ssh/{{ item }}"
+     loop:
+     - "id_rsa"
+     - "id_rsa.pub"
+  -
     name: "Copy AWS credentials for dynamic inventory"
     copy:
       src: "{{ item.src }}"

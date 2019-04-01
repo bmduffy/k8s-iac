@@ -1,0 +1,11 @@
+
+# Terraform ignore files
+**/.terraform*
+**/*.plan
+
+# Ansible ignore files
+**/*.retry
+
+# Python ignore files
+**/*.pyo
+**/*.pyc

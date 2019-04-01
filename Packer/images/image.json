@@ -1,0 +1,54 @@
+{
+    "variables": {
+        "image_name" : "",
+        "playbook"   : ""
+    },
+    "builders": [
+        {
+            "type": "amazon-ebs",
+            "ami_name": "{{user `image_name`}}-{{timestamp}}",
+            "instance_type": "t2.micro",
+            "ssh_username": "centos",
+            "region": "eu-west-1",
+            "source_ami_filter": {
+                "most_recent": true,
+                "owners": ["679593333241"],
+                "filters": {
+                    "product-code": "aw0evgkw8e5c1q413zgy5pjce"
+                }
+            },
+            "ssh_keypair_name": "packer-key",
+            "ssh_private_key_file": "~/.ssh/packer-key.pem",
+            "shutdown_behavior": "terminate",
+            "tags": {
+                "Name": "{{user `image_name`}}-{{timestamp}}",
+                "Project": "Bootcamp",
+                "Environment": "Test",
+                "OS_Version": "CentOS",
+                "Build_Date": "{{timestamp}}"
+            },
+            "encrypt_boot": true,
+            "kms_key_id": "6f34bcd6-2000-4309-b5af-25533460f97a",
+            "launch_block_device_mappings": [
+                {
+                    "device_name": "/dev/sda1",
+                    "encrypted": true,
+                    "volume_size": 20,
+                    "volume_type": "gp2",
+                    "delete_on_termination": true
+                }
+            ],
+            "vpc_id": "vpc-03f7cb65",
+            "subnet_id": "subnet-141a7372"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "ansible",
+            "host_alias": "packer",
+            "user": "centos",
+            "playbook_file": "{{user `playbook`}}",
+            "ansible_env_vars": ["ANSIBLE_HOST_KEY_CHECKING=False", "ANSIBLE_SSH_ARGS='-o ForwardAgent=yes -o ControlMaster=auto -o ControlPersist=60s'", "ANSIBLE_NOCOLOR=True"]
+        }
+    ]
+}

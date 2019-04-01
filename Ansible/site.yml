@@ -1,0 +1,4 @@
+
+import_playbook: "./playbooks/dynamic-inventory.yml"
+import_playbook: "./playbooks/hostname-config.yml"
+import_playbook: "./playbooks/install-kubernetes.yml"

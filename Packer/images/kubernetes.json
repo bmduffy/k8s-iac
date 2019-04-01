@@ -1,0 +1,4 @@
+{
+    "image_name" : "kubernetes-image",
+    "playbook"   : "../provision/playbooks/kubernetes.yml"
+}

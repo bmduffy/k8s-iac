@@ -1,6 +1,9 @@
 
+**/*~
+
 # Terraform ignore files
-**/.terraform*
+**/.terraform
+**/terraform.fstate
 **/*.plan
 
 # Ansible ignore files

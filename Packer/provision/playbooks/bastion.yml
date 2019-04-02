@@ -34,7 +34,22 @@
     - "bridge-utils"
     - "bash-completion"
     - "firewalld"
-    - "awscli"
+    - "python2-pip"
+  -
+     name: "Upgrade pip to latest"
+     pip:
+       name: "pip"
+       state: latest
+  -
+     name: "Install pip packages"
+     pip:
+       name: "{{ item }}"
+     loop:
+     - "awscli"
+     - "boto"
+     - "boto3"
+     - "botocore"
+     - "s3transfer"
   -
     name: "Create config directories in centos home directory"
     file:
@@ -59,6 +74,11 @@
      loop:
      - "id_rsa"
      - "id_rsa.pub"
+  -
+     name: "Add the ssh key to the agent"
+     shell: |
+       eval $(ssh-agent -s)
+       ssh-add {{ home }}/.ssh/id_rsa
   -
     name: "Copy AWS credentials for dynamic inventory"
     copy:

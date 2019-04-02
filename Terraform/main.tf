@@ -31,6 +31,7 @@ data "aws_ami" "kubernetes" {
 
 locals {
     default_tags = {
+        Region     = "${var.aws_region}"
         Project    = "${var.project_name}"
         Enviroment = "${var.environment}"
     }

@@ -69,7 +69,7 @@ resource "aws_route53_record" "ec2_public_records" {
     zone_id = "${var.vpc["public_zone_id"]}"
     name    = "${local.hosts[count.index]}.${var.vpc["public_dns_domain"]}"
     type    = "A"
-    ttl     = "172800"
+    ttl     = "300"
     records = ["${local.public_ips[count.index]}"]
     depends_on = ["aws_instance.ec2"]
 }

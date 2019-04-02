@@ -1,82 +1,44 @@
 
-resource "aws_vpc" "bootcamp" {
-
+resource "aws_vpc" "network" {
     cidr_block           = "${var.vpc_cidr}"
     enable_dns_support   = true
     enable_dns_hostnames = true
-
-    tags = {
-        Name = "iac-bootcamp-vpc"
-        Project = "iac-bootcamp"
-        Environment = "Test"
-        InfraComponent = "Network"
-        DeploymentDate = "${timestamp()}"
-    }
+    tags = "${merge(var.tags, map("Name", format("%s-vpc", var.prefix)))}"
 }
 
-resource "aws_subnet" "kubernetes" {
-
-    vpc_id     = "${aws_vpc.bootcamp.id}"
-    cidr_block = "${var.kubernetes_subnet["cidr"]}"
-
-    tags = {
-        Name = "${var.kubernetes_subnet["name"]}"
-        Project = "iac-bootcamp"
-        Environment = "Test"
-        InfraComponent = "Network"
-        DeploymentDate = "${timestamp()}"
-    }
+# TODO - implement multiple subnetes for HA cluster
+resource "aws_subnet" "subnet" {
+    vpc_id     = "${aws_vpc.network.id}"
+    cidr_block = "${var.subnet["cidr"]}"
+    tags = "${merge(var.tags, map("Name", format("%s-subnet", var.prefix)))}"
 }
 
-resource "aws_internet_gateway" "bootcamp" {
-
-    vpc_id = "${aws_vpc.bootcamp.id}"
-
-    tags = {
-        Name = "iac-bootcamp-igw"
-        Project = "iac-bootcamp"
-        Environment = "Test"
-        InfraComponent = "Network"
-        DeploymentDate = "${timestamp()}"
-    }
+resource "aws_internet_gateway" "network" {
+    vpc_id = "${aws_vpc.network.id}"
+    tags = "${merge(var.tags, map("Name", format("%s-gateway", var.prefix)))}"
 }
 
-resource "aws_route_table" "bootcamp" {
-
-    vpc_id = "${aws_vpc.bootcamp.id}"
-
+resource "aws_route_table" "network" {
+    vpc_id = "${aws_vpc.network.id}"
     route {
         cidr_block = "0.0.0.0/0"
-        gateway_id = "${aws_internet_gateway.bootcamp.id}"
+        gateway_id = "${aws_internet_gateway.network.id}"
     }
-
-    tags {
-        Name = "iac-bootcamp-public"
-        Project = "iac-bootcamp"
-        Environment = "Test"
-        InfraComponent = "Network"
-        DeploymentDate = "${timestamp()}"
-    }
+    tags = "${merge(var.tags, map("Name", format("%s-routes", var.prefix)))}"
 }
 
-resource "aws_route_table_association" "connect-k8s-subnet-to-bootcamp-route-table" {
-  subnet_id      = "${aws_subnet.kubernetes.id}"
-  route_table_id = "${aws_route_table.bootcamp.id}"
+resource "aws_route_table_association" "route_subnet" {
+    subnet_id      = "${aws_subnet.subnet.id}"
+    route_table_id = "${aws_route_table.network.id}"
 }
 
-resource "aws_security_group" "kubernetes" {
+resource "aws_security_group" "network" {
 
-    name        = "${var.kubernetes_subnet["name"]}"
+    name        = "${var.subnet["name"]}"
     description = "Allow traffic to standard ports in kubernetes cluster"
-    vpc_id      = "${aws_vpc.bootcamp.id}"
+    vpc_id      = "${aws_vpc.network.id}"
 
-    tags {
-        Name = "${var.kubernetes_subnet["name"]}"
-        Project = "iac-bootcamp"
-        Environment = "Test"
-        InfraComponent = "Network"
-        DeploymentDate = "${timestamp()}"
-    }
+    tags = "${merge(var.tags, map("Name", format("%s-sec-grp", var.prefix)))}"
 
     ingress {
         from_port   = 53
@@ -154,4 +116,21 @@ resource "aws_security_group" "kubernetes" {
         protocol    = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }
+}
+
+data "aws_route53_zone" "public" {
+    count = "${var.public_dns}"
+    name  = "${var.public_dns}"
+}
+
+resource "aws_route53_zone" "private" {
+    name  = "${var.subnet["dns"]}"
+    vpc { vpc_id = "${aws_vpc.network.id}" }
+    tags = "${merge(var.tags, map("Name", format("%s-private", var.prefix)))}"
+}
+
+resource "aws_route53_zone" "reverse" {
+    name  = "${var.subnet["reverse"]}"
+    vpc { vpc_id = "${aws_vpc.network.id}" }
+    tags = "${merge(var.tags, map("Name", format("%s-reverse", var.prefix)))}"
 }

@@ -119,7 +119,7 @@ resource "aws_security_group" "network" {
 }
 
 data "aws_route53_zone" "public" {
-    count = "${var.public_dns}"
+    count = "${var.public_dns == "undefined" ? 0 : 1}"
     name  = "${var.public_dns}"
 }
 

@@ -8,7 +8,7 @@ resource "null_resource" "data" {
 
 locals {
     hosts = "${null_resource.data.*.triggers.name}"
-    boostrap_script = "${prefix}-bootstrap.sh"
+    boostrap_script = "${var.prefix}-bootstrap.sh"
 }
 
 resource "aws_instance" "ec2" {

@@ -1,6 +1,11 @@
 variable "project_name" {
     type = "string"
-    description = "Required - Name to tag all the objects with"
+    description = "Required - Project name to tag all the objects with"
+}
+
+variable "environment" {
+    type = "string"
+    description = "Required - Environment to tag all the objects with"
 }
 
 variable "my_owner_id" {
@@ -36,6 +41,7 @@ variable "worker_size"  { default = "t2.small" }
 variable "public_dns" {
     type = "string"
     description = "Optional - If you have pre-created a public register zone and domain name"
+    default = "undefined"
 }
 
 variable "keypair" {

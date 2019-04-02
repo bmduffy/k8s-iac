@@ -1,4 +1,6 @@
 
+# Create AWS ec2 instances
+
 resource "null_resource" "data" {
     count = "${var.quantity}"
     triggers { name = "${format("%s%02d", var.prefix, count.index + 1)}" }
@@ -28,19 +30,19 @@ resource "aws_instance" "ec2" {
 
     security_groups = ["${var.vpc.["security_group_id"]}"]
 
-    tags = "${merge(
-        var.tags, map("Type", var.prefix, "Name", local.hosts[count.index])
-    )}"
+    tags = "${merge(var.tags, map("Type", var.prefix, "Name", local.hosts[count.index]))}"
 
-    # provisioner "file" {
-    #     source      = "./scripts/basic-bootstrap.sh"
-    #     destination = "~/basic-bootstrap.sh"
-    # }
-    #
-    # provisioner "local-exec" {
-    #     command = "sudo bash ~/basic-bootstrap.sh"
-    # }
+    provisioner "file" {
+        source      = "./scripts/basic-bootstrap.sh"
+        destination = "~/basic-bootstrap.sh"
+    }
+
+    provisioner "local-exec" {
+        command = "sudo bash ~/basic-bootstrap.sh"
+    }
 }
+
+# Create DNS records in public and private zones
 
 locals {
     private_ips = "${aws_instance.ec2.*.private_ip}"

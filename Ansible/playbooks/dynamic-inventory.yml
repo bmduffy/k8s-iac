@@ -3,30 +3,32 @@
 - hosts: localhost
   connection: local
   gather_facts: no
-  var:
+  vars:
     role_groups:
-        Master:
+        master:
         - "nodes"
         - "masters"
         - "kubernetes"
-        Bastion:
+        bastion:
         - "nodes"
-        - "bastions"
-        Worker:
+        - "bastion"
+        worker:
         - "nodes"
         - "workers"
         - "kubernetes"
   tasks:
   -
-    name: "Gather ec2 fact for deployed instances"
-    ec2_remote_facts:
-      region: "{{ cluster.region }}"
-    register: aws_host_facts
+    name: "Gather instances facts"
+    ec2_instance_facts:
+    register: facts
   -
-    name: ""
+    name: "Add hosts and groups"
+    include_tasks: "./add-host.yml"
+    vars:
+       host_facts: "{{ item }}"
+    loop: "{{ facts.instances }}"
+  - 
+    name: "Add first master group"
     add_host:
-      hostname: "{{ item }}"
-      ansible_user: centos
-      ansible_ssh_user: centos
-      groups: "{{ role_groups[item.tags] }}"
-    loop: "{{ aws_host_facts.instances }}"
+      hostname: "{{ groups.masters.0 }}"
+      groups: "first_master"

@@ -1,0 +1,26 @@
+---
+
+- name: "Get host name and role"
+  set_fact:
+    host_short_name: "{{ host_facts.tags.Name }}"
+    host_type: "{{ host_facts.tags.Type }}"
+    host_ip: "{{ host_facts.private_ip_address }}"
+
+- name: "Query DNS for private hostname"
+  shell: "dig +short -x {{ host_ip }}"
+  register: output
+
+- name: "Host Facts"
+  set_fact:
+    hostname: "{{ output.stdout[:-1] }}"
+
+- name: "Add hosts and groups"
+  add_host:
+    hostname: "{{ hostname }}"
+    ansible_host: "{{ host_ip }}"
+    ansible_user: centos
+    ansible_ssh_user: centos
+    instance_id: "{{ host_facts.instance_id }}"
+    availability_zone: "{{ host_facts.placement.availability_zone }}"
+    state: "{{ host_facts.state.name }}"
+    groups: "{{ role_groups[host_type] }}"

@@ -69,11 +69,16 @@
   -
      name: "Copy SSH keys"
      copy:
-       src: "~/.ssh/{{ item }}"
-       dest: "{{ home }}/.ssh/{{ item }}"
+       src: "~/.ssh/{{ item.name }}"
+       dest: "{{ home }}/.ssh/{{ item.name }}"
+       mode: "{{ item.permissions }}"
      loop:
-     - "id_rsa"
-     - "id_rsa.pub"
+     -
+       name: "id_rsa"
+       permissions: '600'
+     -
+       name: "id_rsa.pub"
+       permissions: '644'
   -
      name: "Add the ssh key to the agent"
      shell: |

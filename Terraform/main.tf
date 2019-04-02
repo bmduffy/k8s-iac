@@ -77,3 +77,15 @@ module "workers" {
     keypair  = "${var.keypair}"
     vpc      = "${module.vpc.outputs}"
 }
+
+resource "null_resource" "start_kubernetes_install" {
+    provisioner "local-exec" {
+        command = "echo 'HelloWorld'"
+        interpreter = ["/bin/bash", "-c"]
+    }
+    depends_on = [
+        "module.bastion",
+        "module.masters",
+        "module.workers"
+    ]
+}

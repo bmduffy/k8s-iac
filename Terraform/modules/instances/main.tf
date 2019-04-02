@@ -8,7 +8,7 @@ resource "null_resource" "data" {
 
 locals {
     hosts = "${null_resource.data.*.triggers.name}"
-    boostrap_script = "${var.prefix}-bootstrap.sh"
+    bootstrap_script = "${var.prefix}-bootstrap.sh"
 }
 
 resource "aws_instance" "ec2" {
@@ -28,18 +28,9 @@ resource "aws_instance" "ec2" {
         volume_type = "${var.root_volume_type}"
     }
 
-    security_groups = ["${var.vpc.["security_group_id"]}"]
+    security_groups = ["${var.vpc["security_group_id"]}"]
 
     tags = "${merge(var.tags, map("Type", var.prefix, "Name", local.hosts[count.index]))}"
-
-    provisioner "file" {
-        source      = "./scripts/basic-bootstrap.sh"
-        destination = "~/basic-bootstrap.sh"
-    }
-
-    provisioner "local-exec" {
-        command = "sudo bash ~/basic-bootstrap.sh"
-    }
 }
 
 # Create DNS records in public and private zones

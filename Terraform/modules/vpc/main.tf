@@ -123,6 +123,16 @@ data "aws_route53_zone" "public" {
     name  = "${var.public_dns}"
 }
 
+locals {
+    zones = "${data.aws_route53_zone.public.*.zone_id}"
+}
+
+resource "null_resource" "public" {
+    triggers {
+        zone_id = "${length(local.zones) > 0 ? local.zones[0] : "undefined"}"
+    }
+}
+
 resource "aws_route53_zone" "private" {
     name  = "${var.subnet["dns"]}"
     vpc { vpc_id = "${aws_vpc.network.id}" }

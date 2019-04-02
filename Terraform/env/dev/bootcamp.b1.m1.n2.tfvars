@@ -4,5 +4,5 @@
     "environment": "development",
     "public_dns": "bmduffy.net",
     "aws_region": "eu-west-1",
-    "aws_profile": "default"
+    "aws_profile": "default",
 }

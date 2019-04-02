@@ -11,5 +11,5 @@ export route_53_hostname=$(dig +short -x ${aws_local_ipv4})
 sudo hostnamectl set-hostname "${route_53_hostname}"
 
 
-# Reboot to ensure all changes take effect
-reboot
+# # Reboot to ensure all changes take effect
+# reboot

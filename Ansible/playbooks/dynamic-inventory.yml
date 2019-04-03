@@ -20,10 +20,12 @@
   -
     name: "Gather instances facts"
     ec2_instance_facts:
-        filters:
-          "tag:Project": "{{ project_name }}"
-          "tag:Environment": "{{ project_environment }}"
+      filters:
+        "tag:Project": "{{ project_name }}"
     register: facts
+  - 
+    debug:
+      var: hostvars
   -
     name: "Add hosts and groups"
     include_tasks: "./add-host.yml"

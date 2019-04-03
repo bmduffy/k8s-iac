@@ -1,4 +1,7 @@
+---
 
-import_playbook: "./playbooks/dynamic-inventory.yml"
-import_playbook: "./playbooks/hostname-config.yml"
-import_playbook: "./playbooks/install-kubernetes.yml"
+- name: "Generate inventory form AWS API"
+  import_playbook: "./playbooks/dynamic-inventory.yml"
+
+- name: "Install kubernetes cluster"
+  import_playbook: "./playbooks/install-kubernetes.yml"

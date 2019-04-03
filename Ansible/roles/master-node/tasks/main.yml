@@ -1,0 +1,23 @@
+
+- name: "Ensure kubelet is started and enabled"
+  systemd:
+    name: kubelet
+    enabled: yes
+    state: started
+
+- name: "Get kubernetes version"
+  shell: "kubectl version | base64"
+  register: kubectl_version
+
+- name: "Check if not has been initialized"
+  stat:
+    path: "{{ kubernetes_admin_conf }}"
+  register: admin_conf
+
+- name: "Set initialization facts"
+  set_fact:
+    kubernetes_version: "{{ kubectl_version.stdout.strip() }}"
+    not_initialized: "{{ not admin_conf.stat.exist }}"
+
+- name: "Initalize master node"
+  include_tasks: "initialize.yml"

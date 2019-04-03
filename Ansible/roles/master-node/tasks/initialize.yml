@@ -1,0 +1,39 @@
+---
+
+- name: "bridge nf call iptables file"
+  copy:
+    content: "1"
+    dest: "/proc/sys/net/bridge/bridge-nf-call-iptables"
+
+- name: "init cluster"
+  shell: "kubeadm init"
+
+- name: "Create user kube directory"
+  file:
+    path: "{{ kubernetes_home }}/.kube"
+    state: directory
+
+- name: "Copy `admin.conf`"
+  file:
+    src:   "{{ kubernetes_admin_conf }}"
+    dest:  "{{ kubernetes_home }}/.kube/config"
+    owner: "{{ kubernetes_user }}"
+    group: "{{ kubernetes_user }}"
+    state: hard
+
+- name: "Wait for the kubernetes admin port on `{{ inventory_hostname }}`"
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: 6443
+    timeout: 30
+
+- name: "Set weave URL"
+  set_fact:
+    weave_network: "https://cloud.weave.works/k8s/net?k8s-version={{ kubernetes_version }}"
+
+- name: "Deploy weave pod network"
+  shell: "kubectl apply -f {{ weave_network }}"
+
+- name: "Wait for the SDN to come up"
+  pause:
+    seconds: 20

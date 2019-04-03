@@ -1,7 +1,17 @@
 ---
 
-- name: "start-and-enable-firewall"
+- name: "start-firewall"
   systemd:
-    name: "firewalld"
+    name: firewalld
     enabled: yes
     state: started
+
+- name: "reload-firewall"
+  systemd:
+    name: firewalld
+    state: reloaded
+
+- name: "restart-firewall"
+  systemd:
+    name: firewalld
+    state: restarted

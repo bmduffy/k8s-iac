@@ -1,7 +1,7 @@
 ---
 
 - name: "Map node type to file name"
-  set_fact: 
+  set_fact:
     file_name: "{{ hostvars[inventory_hostname].host_type }}"
 
 - name: "Load firewall rules"
@@ -17,4 +17,7 @@
     state: enabled
   loop: "{{ firewall_rules }}"
   when: firewall_rules
-  notify: "start-and-enable-firewall"
+  notify:
+  - start-firewall
+  - reload-firewall
+  - restart-firewall

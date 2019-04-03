@@ -1,0 +1,6 @@
+---
+
+kubernetes_user: "{{ hostvars[inventory_hostname].ansible_user }}"
+kubernetes_home: "/home/{{ kubernetes_user }}"
+
+kubernetes_admin_conf: "/etc/kubernetes/admin.conf"

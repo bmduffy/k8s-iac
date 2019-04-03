@@ -1,12 +1,12 @@
 ---
 
-- name: "bridge nf call iptables file"
-  copy:
-    content: "1"
-    dest: "/proc/sys/net/bridge/bridge-nf-call-iptables"
+- name: "Ignore preflight errors"
+  set_fact:
+    ignored:
+    - "FileContent--proc-sys-net-bridge-bridge-nf-call-iptables"
 
-- name: "init cluster"
-  shell: "kubeadm init"
+- name: "init cluster - this will take a minute"
+  shell: "kubeadm init --ignore-preflight-errors='{{ ignored | join(',') }}'"
 
 - name: "Create user kube directory"
   file:

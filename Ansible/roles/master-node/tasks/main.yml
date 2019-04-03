@@ -17,7 +17,7 @@
 - name: "Set initialization facts"
   set_fact:
     kubernetes_version: "{{ kubectl_version.stdout.strip() }}"
-    not_initialized: "{{ not admin_conf.stat.exist }}"
+    not_initialized: "{{ not admin_conf.stat.exists }}"
 
 - name: "Initalize master node"
   include_tasks: "initialize.yml"

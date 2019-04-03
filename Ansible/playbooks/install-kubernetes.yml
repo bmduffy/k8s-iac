@@ -6,7 +6,7 @@
   - "hostname"
   - "firewall"
 
-#- name: "Start kubelets"
-#  hosts: kubernetes
-#  role:
-#  - kubelet
+- name: "Initialize First Master Node"
+  hosts: first_master
+  roles:
+  - "master-node"

@@ -1,32 +1,12 @@
 ---
 
-- name: "Install First Masters"
-  hosts: masters
-  tasks:
-  -
-    name: "Configure firewall rules"
-    firewalld:
-      port: "{{ item }}"
-      permanent: true
-      state: enabled
-    loop:
-    - 6443/tcp
-    - 2379-2380/tcp
-    - 8080/tcp
-    - 10250-10252/tcp
-    - 10255/tcp
+- name: "Basic Node Config"
+  hosts: all
+  roles:
+  - "hostname"
+  - "firewall"
 
-- name: "Install Workers"
-  hosts: workers
-  tasks:
-  -
-    name: "Configure firewall rules"
-    firewalld:
-      port: "{{ item }}"
-      permanent: true
-      state: enabled
-    loop:
-    - 10250/tcp
-    - 10255/tcp
-    - 30000-32767/tcp
-    - 6783/tcp
+#- name: "Start kubelets"
+#  hosts: kubernetes
+#  role:
+#  - kubelet

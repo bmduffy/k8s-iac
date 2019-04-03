@@ -20,6 +20,7 @@
     ansible_host: "{{ host_ip }}"
     ansible_user: centos
     ansible_ssh_user: centos
+    host_type: "{{ host_type }}"
     instance_id: "{{ host_facts.instance_id }}"
     availability_zone: "{{ host_facts.placement.availability_zone }}"
     state: "{{ host_facts.state.name }}"

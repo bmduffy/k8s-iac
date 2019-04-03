@@ -6,13 +6,12 @@
   gather_facts: no
   vars:
     role_groups:
+        bastion:
+        - "bastion"
         master:
         - "nodes"
         - "masters"
         - "kubernetes"
-        bastion:
-        - "nodes"
-        - "bastion"
         worker:
         - "nodes"
         - "workers"

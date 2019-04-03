@@ -21,4 +21,4 @@
 
 - name: "Initalize master node"
   include_tasks: "initialize.yml"
-  when: not_initalized
+  when: not_initialized

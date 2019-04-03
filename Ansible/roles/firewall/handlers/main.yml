@@ -1,0 +1,7 @@
+---
+
+- name: "start-and-enable-firewall"
+  systemd:
+    name: "firewalld"
+    enabled: yes
+    state: started

@@ -1,0 +1,6 @@
+
+firewall_rules:
+- 10250/tcp
+- 10255/tcp
+- 30000-32767/tcp
+- 6783/tcp

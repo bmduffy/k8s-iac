@@ -20,6 +20,9 @@
   -
     name: "Gather instances facts"
     ec2_instance_facts:
+        filters:
+          "tag:Project": "{{ project_name }}"
+          "tag:Environment": "{{ project_environment }}"
     register: facts
   -
     name: "Add hosts and groups"
@@ -27,7 +30,7 @@
     vars:
        host_facts: "{{ item }}"
     loop: "{{ facts.instances }}"
-  - 
+  -
     name: "Add first master group"
     add_host:
       hostname: "{{ groups.masters.0 }}"

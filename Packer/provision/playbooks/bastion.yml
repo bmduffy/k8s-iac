@@ -56,7 +56,7 @@
       path: "{{ item }}"
       state: directory
       owner: "centos"
-      group: "centos"      
+      group: "centos"
     loop:
     - "{{ home }}/.ssh"
     - "{{ home }}/.aws"
@@ -74,8 +74,8 @@
        src: "~/.ssh/{{ item.name }}"
        dest: "{{ home }}/.ssh/{{ item.name }}"
        mode: "{{ item.permissions }}"
-       owner: "centos"
-       group: "centos"
+       owner: centos
+       group: centos
      loop:
      -
        name: "id_rsa"
@@ -83,11 +83,6 @@
      -
        name: "id_rsa.pub"
        permissions: '644'
-  -
-     name: "Add the ssh key to the agent"
-     shell: |
-       eval $(ssh-agent -s)
-       ssh-add {{ home }}/.ssh/id_rsa
   -
     name: "Copy AWS credentials for dynamic inventory"
     copy:

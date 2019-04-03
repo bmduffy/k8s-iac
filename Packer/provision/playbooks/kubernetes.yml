@@ -65,6 +65,11 @@
     name: "Reload sysctl"
     shell: "sysctl --system"
   -
+    name: "Ensure net config files exist"
+    copy:
+      content: "1"
+      dest: "/proc/sys/net/bridge/bridge-nf-call-iptables"
+  -
     name: "Add CRI-O yum repositry"
     yum_repository:
       name: "cri-o"

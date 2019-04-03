@@ -8,6 +8,7 @@
 
 # Ansible ignore files
 **/*.retry
+**/*.log
 
 # Python ignore files
 **/*.pyo

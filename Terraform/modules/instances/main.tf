@@ -6,10 +6,7 @@ resource "null_resource" "data" {
     triggers { name = "${format("%s%02d", var.prefix, count.index + 1)}" }
 }
 
-locals {
-    hosts = "${null_resource.data.*.triggers.name}"
-    bootstrap_script = "${var.prefix}-bootstrap.sh"
-}
+locals { hosts = "${null_resource.data.*.triggers.name}" }
 
 resource "aws_instance" "ec2" {
 

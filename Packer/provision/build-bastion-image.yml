@@ -5,6 +5,11 @@
   become: yes
   become_method: sudo
   become_user: root
+  vars:
+    cloud_user: "{{ hostvars[inventory_hostname].ansible_user }}"
+    cloud_home: "/home/{{ cloud_user }}"
+    pem_src: "~/.ssh/k8s-key.pem"
+    git_ssh_private_key: "~/.ssh/id_rsa"
   roles:
   - role: "common"
   - role: "ansible"

@@ -1,0 +1,25 @@
+---
+
+- name: "Update locale settings"
+  copy:
+    content: |
+      LANG=en_GB.utf-8
+      LC_ALL=en_GB.utf-8
+    dest: "/etc/environment"
+
+- name: "Turn off yum caching"
+  lineinfile:
+    path: "/etc/yum.conf"
+    regexp: "^http_caching="
+    line: "http_caching=none"
+
+- name: "Set selinux to permissive mode"
+  selinux:
+    policy: "targeted"
+    state: "permissive"
+
+- name: "Install useful packages"
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ useful_packages }}"

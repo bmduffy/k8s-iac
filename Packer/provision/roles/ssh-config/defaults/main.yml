@@ -1,0 +1,16 @@
+---
+
+pem_dst: "{{ cloud_home }}/.ssh/key.pem"
+git_dst: "{{ cloud_home }}/.ssh/github"
+
+git_keys:
+-
+  src: "{{ git_ssh_private_key }}"
+  dst: "{{ git_dst }}"
+  permissions: '600'
+-
+  src: "{{ git_ssh_private_key }}.pub"
+  dst: "{{ git_dst }}.pub"
+  permissions: '644'
+
+ssh_config: "{{ cloud_home }}/.ssh/config"

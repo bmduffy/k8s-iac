@@ -1,0 +1,9 @@
+---
+
+- name: "Install ansible and related packages"
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop:
+  - "epel-release"
+  - "ansible"

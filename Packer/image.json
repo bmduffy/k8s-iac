@@ -32,7 +32,6 @@
             "launch_block_device_mappings": [
                 {
                     "device_name": "/dev/sda1",
-                    "encrypted": true,
                     "volume_size": 20,
                     "volume_type": "gp2",
                     "delete_on_termination": true
@@ -48,7 +47,9 @@
             "host_alias": "packer",
             "user": "centos",
             "playbook_file": "{{user `playbook`}}",
-            "ansible_env_vars": ["ANSIBLE_HOST_KEY_CHECKING=False", "ANSIBLE_SSH_ARGS='-o ForwardAgent=yes -o ControlMaster=auto -o ControlPersist=60s'", "ANSIBLE_NOCOLOR=True"]
+            "ansible_env_vars": [
+                "ANSIBLE_SSH_ARGS='-o ForwardAgent=yes -o ControlMaster=auto -o ControlPersist=60s'"
+            ]
         }
     ]
 }

@@ -1,0 +1,13 @@
+---
+
+- name: "start-crio"
+  systemd:
+    name: "crio"
+    enabled: yes
+    state: started
+
+- name: "start-kubelet"
+  systemd:
+    name: "kubelet"
+    enabled: yes
+    state: started

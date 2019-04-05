@@ -1,0 +1,8 @@
+---
+
+- name: "Install firewall"
+  yum:
+    name: "firewalld"
+    state: "present"
+  notify:
+  - "start-firewall"

@@ -18,6 +18,5 @@
   loop: "{{ firewall_rules }}"
   when: firewall_rules
   notify:
-  - start-firewall
   - reload-firewall
   - restart-firewall

@@ -1,0 +1,5 @@
+---
+
+kubernetes_version: "1.14.0"
+container_runtime: "crio"
+pod_network: "weave"

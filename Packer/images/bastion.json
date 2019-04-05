@@ -1,4 +1,4 @@
 {
     "image_name" : "bastion-image",
-    "playbook"   : "../provision/playbooks/bastion.yml"
+    "playbook"   : "./provision/build-bastion-image.yml"
 }

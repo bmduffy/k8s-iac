@@ -1,0 +1,24 @@
+---
+
+- name: "Create kubernetes service drop-in file for crio"
+  copy:
+    content: |
+       [Service]
+       Environment="KUBELET_EXTRA_ARGS=--container-runtime=remote --container-runtime-endpoint=/var/run/crio/crio.sock"
+     dest: "/etc/systemd/system/kubelet.service.d/20-cri.conf"
+
+- name: "Add CRI-O yum repositry"
+  yum_repository:
+     name: "cri-o"
+     description: "CRI-O repository"
+     baseurl: "https://cbs.centos.org/repos/paas7-crio-311-candidate/x86_64/os/"
+     enabled: yes
+     gpgcheck: no
+     repo_gpgcheck: no
+
+- name: "Install CRI-O"
+  yum:
+    name: "cri-o"
+    state: present
+  notify:
+  - "start-crio"

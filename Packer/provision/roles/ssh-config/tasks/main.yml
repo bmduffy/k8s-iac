@@ -1,0 +1,39 @@
+---
+
+- name: "Copy PEM to bastion"
+  copy:
+    src:   "{{ pem_src }}"
+    dest:  "{{ pem_dst }}"
+    owner: "{{ cloud_user }}"
+    group: "{{ cloud_user }}"
+    mode: 0400
+
+- name: "Copy SSH keys"
+  copy:
+    src:  "{{ item.src }}"
+    dest: "{{ item.dst }}"
+    mode: "{{ item.permissions }}"
+    owner: "{{ cloud_user }}"
+    group: "{{ cloud_user }}"
+  loop: "{{ git_keys }}"
+
+- name: "Create ssh-agent service file"
+  copy:
+    src: "ssh-agent.service"
+    dest: "/etc/systemd/system/ssh-agent.service"
+  notify:
+  - "start-ssh-agent"
+
+- name: "Set SSH config"
+  copy:
+    content: |
+      Host *.iac.bootcamp
+          StrictHostKeyChecking no
+          UserKnownHostsFile=/dev/null
+          IdentityFile {{ pem_dst }}
+      Host github.com
+          User git
+          StrictHostKeyChecking no
+          UserKnownHostsFile=/dev/null
+          IdentityFile {{ git_dst }}
+    dest: "{{ ssh_config }}"

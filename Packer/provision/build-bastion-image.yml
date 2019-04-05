@@ -1,0 +1,13 @@
+---
+
+- name: "Provision Bastion Base Image"
+  hosts: packer
+  become: yes
+  become_method: sudo
+  become_user: root
+  roles:
+  - role: "common"
+  - role: "ansible"
+  - role: "firewall"
+  - role: "ssh-config"
+  - role: "aws"

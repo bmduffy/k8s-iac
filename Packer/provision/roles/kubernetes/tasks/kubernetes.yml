@@ -1,0 +1,30 @@
+---
+
+- name: "Ensure kubernetes repo is enabled"
+  yum_repository:
+    name: "kubernetes"
+    description: "kubernetes install packages"
+    baseurl: "https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64"
+    enabled: yes
+    gpgcheck: yes
+    repo_gpgcheck: yes
+    gpgkey:
+    - "https://packages.cloud.google.com/yum/doc/yum-key.gpg"
+    - "https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg"
+    exclude:
+    - "kube*"
+
+- name: "Install kubernetes packages"
+  yum:
+    name: "{{ item }}"
+    state: present
+    disable_excludes: "kubernetes"
+  loop:
+  - "kubelet-{{ kubernetes_version}}"
+  - "kubeadm-{{ kubernetes_version }}"
+  - "kubectl-{{ kubernetes_version }}"
+  notify:
+  - "start-kubelet"
+
+- name: "Pre-pull images"
+  shell: "kubeadm config images pull"

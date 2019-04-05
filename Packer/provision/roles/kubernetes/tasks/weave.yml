@@ -1,0 +1,32 @@
+---
+
+- name: "Download weave pod network config file"
+  get_url:
+    url: "https://cloud.weave.works/k8s/net?k8s-version={{ kubernetes_version }}"
+    dest: "{{ cloud_home }}/pod-network.yml"
+
+- name: "Read contents of network config"
+  slurp:
+     src: "{{ cloud_home }}/pod-network.yml"
+  register: ouptut
+
+- name: "Get config"
+  set_fact:
+    config: "{{ output.content | b64decode | from_yaml }}"
+    query: "items[?kind=='DaemonSet'].spec.template.spec.containers[*].image"
+
+- name: "Get the images from the config"
+  set_fact:
+    weave_images: "{{ config | json_query(query) }}"
+
+- name: "Install skopeo to copy images"
+  yum:
+    name: "skopeo"
+
+# Example
+# - 'docker.io/weaveworks/weave-kube:2.5.1'
+# - 'docker.io/weaveworks/weave-npc:2.5.1'
+
+- name: "Pre-pull weave images"
+  shell: "skopeo copy {{ item }} containers-storage:{{ item.split('/')[-1] }}"
+  loop: "{{ weave_images }}"

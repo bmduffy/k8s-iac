@@ -1,0 +1,13 @@
+---
+
+- name: "Kernel and iptables prerequisites"
+  inlcude_tasks: "pre.yml"
+
+- name: "Install container runtime"
+  include_tasks: "{{ container_runtime }}.yml"
+
+- name: "Download pod network configs"
+  include_tasks: "{{ pod_network }}".yml
+  
+- name: "Install kubernetes"
+  include_tasks: "kubernetes.yml"

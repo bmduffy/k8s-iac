@@ -1,6 +1,7 @@
 ---
 
 useful_packages:
+- "epel-release"
 - "wget"
 - "git"
 - "vim"

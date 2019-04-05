@@ -23,8 +23,17 @@
   - "kubelet-{{ kubernetes_version}}"
   - "kubeadm-{{ kubernetes_version }}"
   - "kubectl-{{ kubernetes_version }}"
-  notify:
-  - "start-kubelet"
 
-- name: "Pre-pull images"
+- name: "Create systemd service drop-in folder for kubelet"
+  file:
+    path: "/etc/systemd/system/kubelet.service.d"
+    state: directory
+
+- name: "Start the kubelet"
+  systemd:
+    name: "kubelet"
+    enabled: yes
+    state: started
+
+- name: "Pre-pull kubernets images"
   shell: "kubeadm config images pull"

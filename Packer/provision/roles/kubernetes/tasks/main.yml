@@ -8,6 +8,6 @@
 
 - name: "Download pod network configs"
   include_tasks: "{{ pod_network }}".yml
-  
+
 - name: "Install kubernetes"
   include_tasks: "kubernetes.yml"

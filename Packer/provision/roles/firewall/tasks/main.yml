@@ -4,5 +4,9 @@
   yum:
     name: "firewalld"
     state: "present"
-  notify:
-  - "start-firewall"
+
+- name: "Start firewall"
+  systemd:
+    name: firewalld
+    enabled: yes
+    state: started

@@ -17,13 +17,6 @@
     group: "{{ cloud_user }}"
   loop: "{{ git_keys }}"
 
-- name: "Create ssh-agent service file"
-  copy:
-    src: "ssh-agent.service"
-    dest: "/etc/systemd/system/ssh-agent.service"
-  notify:
-  - "start-ssh-agent"
-
 - name: "Set SSH config"
   copy:
     content: |

@@ -20,5 +20,9 @@
   yum:
     name: "cri-o"
     state: present
-  notify:
-  - "start-crio"
+
+- name: "Start CRI-O"
+  systemd:
+    name: "crio"
+    enabled: yes
+    state: started

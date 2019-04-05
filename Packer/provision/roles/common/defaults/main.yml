@@ -9,3 +9,4 @@ useful_packages:
 - "iptables-services"
 - "bridge-utils"
 - "bash-completion"
+- "python2-pip"

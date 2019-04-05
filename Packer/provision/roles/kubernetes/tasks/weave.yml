@@ -19,10 +19,6 @@
   set_fact:
     weave_images: "{{ config | json_query(query) }}"
 
-- name: "Install skopeo to copy images"
-  yum:
-    name: "skopeo"
-
 # Example
 # - 'docker.io/weaveworks/weave-kube:2.5.1'
 # - 'docker.io/weaveworks/weave-npc:2.5.1'

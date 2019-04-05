@@ -1,28 +1,21 @@
 ---
 
+- name: "Create AWS config directory"
+  file:
+    path: "{{ aws_config_directory }}"
+    state: directory
+    owner: "{{ cloud_user }}"
+    group: "{{ cloud_user }}"
+
 - name: "Transfer local AWS config"
   copy:
     src:  "{{ item.src }}"
     dest: "{{ item.dst }}"
-  loop:
-  -
-    src: "~/.aws/credentials"
-    dst: "{{ home }}/.aws/credentials"
-  -
-    src: "~/.aws/config"
-    dst: "{{ home }}/.aws/config"
-
-- name: "Install pip"
-  yum:
-    name: "python2-pip"
-    state: present
+    owner: "{{ cloud_user }}"
+    group: "{{ cloud_user }}"
+  loop: "{{ aws_config_files }}"
 
 - name: "Install pip packages"
   pip:
     name: "{{ item }}"
-  loop:
-  - "awscli"
-  - "boto"
-  - "boto3"
-  - "botocore"
-  - "s3transfer"
+  loop: "{{ aws_pip_packages }}"
